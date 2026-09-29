@@ -16,7 +16,40 @@ The folders follow the open [Agent Skills](https://agentskills.io) format, so th
 
 ## Using the skills
 
-Clone the repository somewhere you will keep it:
+The easiest way is the [skills.sh](https://skills.sh) CLI, which you run with npx so there is nothing to install first. It detects the agents you have and puts each skill where that agent reads from:
+
+```sh
+npx skills add yldio/skills
+```
+
+That lists the skills in this repository and asks which ones you want and which agents to install them for. Useful variants:
+
+```sh
+# All skills, personal install (user-level, e.g. ~/.claude/skills)
+npx skills add yldio/skills -s '*' -g
+
+# Just one skill
+npx skills add yldio/skills -s forensic-report
+
+# For specific agents (repeat -a for more than one)
+npx skills add yldio/skills -a claude-code
+```
+
+Without `-g` the skill installs into the current project, which is what you want when it should apply only within one project. With `-g` it installs once for your account and is available in every project.
+
+Managing installed skills:
+
+```sh
+npx skills update          # bring installed skills up to date
+npx skills list            # which skills are installed and where
+npx skills remove <name>   # uninstall a skill
+```
+
+Start a new session and the skills are available. In Claude Code you can call one directly with `/<skill-name>`, or describe the task and let the agent choose.
+
+### Without the skills CLI
+
+If you would rather skip npx, clone the repository somewhere you will keep it:
 
 ```sh
 git clone git@github.com:yldio/skills.git ~/yld/skills
@@ -38,13 +71,11 @@ for d in ~/yld/skills/*/; do
 done
 ```
 
-Start a new session and the skills are available. In Claude Code you can call one directly with `/<skill-name>`, or describe the task and let the agent choose. Run `git pull` in your clone now and then to get updates.
-
-If a skill should apply only within one project, copy or link it into that project's `.claude/skills/` directory instead of your home directory.
+Run `git pull` in your clone now and then to get updates. Skills installed this way are not tracked by `npx skills list` or `npx skills update`.
 
 ## Community skills
 
-Standard skills for widely used tools and frameworks already exist in public collections, for example [anthropics/skills](https://github.com/anthropics/skills). Use those rather than writing our own version. Install them the same way as above: clone the collection and link the folders you want into `~/.claude/skills`.
+Standard skills for widely used tools and frameworks already exist in public collections, for example [anthropics/skills](https://github.com/anthropics/skills). Use those rather than writing our own version. Install them the same way as the skills in this repository, for example `npx skills add anthropics/skills`, or clone the collection and link the folders you want into `~/.claude/skills`.
 
 If you find a community skill worth recommending to everyone at YLD, open a pull request that adds a link to it in this section. Do not copy the files into this repository, as the copy will drift from the original and nobody will maintain it.
 
